@@ -17,6 +17,8 @@
 .
 ├── main.py                 # FastAPI应用主入口文件
 ├── requirements.txt        # Python依赖包列表
+├── Dockerfile              # Docker镜像构建文件
+├── .dockerignore           # Docker构建忽略文件
 ├── README.md              # 项目说明文档
 └── sample/                # MCP接口模块目录
     ├── api.py             # 系统监控API路由定义
@@ -41,11 +43,70 @@
 
 ## 运行项目
 
+### 本地开发运行
+
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8023
 ```
 
-访问 http://localhost:8000/docs 查看API文档。
+访问 http://localhost:8023/docs 查看API文档。
+
+### Docker 部署
+
+#### 构建镜像
+
+```bash
+docker build -t fastapi-mcp-app:latest .
+```
+
+或者同时构建多个标签：
+
+```bash
+docker build -t fastapi-mcp-app:latest -t fastapi-mcp-app:1.0.0 .
+```
+
+#### 运行容器
+
+```bash
+docker run -d -p 8023:8023 --name fastapi-mcp fastapi-mcp-app:latest
+```
+
+#### 使用 Docker Compose（可选）
+
+创建 `docker-compose.yml` 文件：
+
+```yaml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8023:8023"
+    container_name: fastapi-mcp
+    restart: unless-stopped
+```
+
+然后运行：
+
+```bash
+docker-compose up -d
+```
+
+#### 查看日志
+
+```bash
+docker logs -f fastapi-mcp
+```
+
+#### 停止容器
+
+```bash
+docker stop fastapi-mcp
+docker rm fastapi-mcp
+```
+
+访问 http://localhost:8023/docs 查看API文档。
 
 ## MCP配置
 
@@ -54,7 +115,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```json
 {
   "system-mcp": {
-    "url": "http://localhost:8000/system-mcp"
+    "url": "http://localhost:8023/system-mcp"
   }
 }
 ```
