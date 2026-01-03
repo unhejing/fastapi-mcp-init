@@ -125,9 +125,7 @@ docker rm fastapi-mcp
 如需添加新的MCP接口，请在 `sample/` 目录下创建新的子目录，例如：
 
 ```
-sample/
-├── system/          # 系统监控接口（当前）
-│   ├── __init__.py
+├── sample/          # 系统监控接口（当前）
 │   ├── api.py
 │   ├── schemas.py
 │   └── utils.py
