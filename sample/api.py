@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 import psutil
-from app.schemas.system_schema import SystemInfo, SystemLoad
+from sample.schemas import SystemInfo, SystemLoad
 
 router = APIRouter(
     prefix="/system",
